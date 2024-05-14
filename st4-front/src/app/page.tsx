@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 import { SetStateAction, useState } from "react";
-import { ChromePicker, PhotoshopPicker } from 'react-color';
+import { ChromePicker, TwitterPicker } from 'react-color';
 
 
 
@@ -11,6 +11,7 @@ export default function Home() {
   const handleChangeComplete = async (color: { hex: SetStateAction<string>; }) => {
     setColor(color.hex);
     console.log(color.hex);
+    hexToRgb(color.hex);
     //send to api
     try {
       const response = await fetch('http://localhost:3000/api/color', {
@@ -26,6 +27,17 @@ export default function Home() {
     }
   };
 
+  const hexToRgb = (hex: string) => {
+    hex = hex.replace(/^#/, '');
+
+    // Parse the r, g, b values
+    let r = parseInt(hex.substring(0, 2), 16);
+    let g = parseInt(hex.substring(2, 4), 16);
+    let b = parseInt(hex.substring(4, 6), 16);
+
+    return console.log(r, g, b);
+  };
+
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -39,14 +51,12 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-6xl font-bold">Welcome to ST4!</h1>
-      <div className="color-picker-container">
-        <h1>Pick a Color</h1>
-        <ChromePicker
-          color={color}
-          onChangeComplete={handleChangeComplete}
-        />
-      </div>
+      <h1 className="text-6xl font-bold">Welcome to Led Color Picker!</h1>
+      <ChromePicker
+        color={color}
+        onChangeComplete={handleChangeComplete}
+        disableAlpha={true}
+      />
     </main>
   );
 }
