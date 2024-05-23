@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 import { SetStateAction, useState } from "react";
-import { ChromePicker, TwitterPicker } from 'react-color';
+import { ChromePicker, TwitterPicker } from "react-color";
 import Footer from "./footer";
 
 
