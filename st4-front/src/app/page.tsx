@@ -38,7 +38,7 @@ export default function Home() {
 
     return console.log(r, g, b);
   };
-
+  /*
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -48,7 +48,7 @@ export default function Home() {
         </div>
       </div>
     );
-  }
+  }*/
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
