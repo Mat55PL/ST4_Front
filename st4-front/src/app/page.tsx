@@ -1,7 +1,9 @@
 'use client';
 import Image from "next/image";
 import { SetStateAction, useState } from "react";
-import { ChromePicker, TwitterPicker } from "react-color";
+import { Slider, Sketch, Material, Colorful, Compact, Circle, Wheel, Block, Github, Chrome, HsvaColor } from '@uiw/react-color';
+import { Alpha, Hue, ShadeSlider, Saturation, hsvaToHslaString } from '@uiw/react-color';
+import { EditableInput, EditableInputRGBA, EditableInputHSLA } from '@uiw/react-color';
 import Footer from "./footer";
 
 
@@ -9,24 +11,6 @@ import Footer from "./footer";
 export default function Home() {
   const [color, setColor] = useState('#fff');
   const [error, setError] = useState<string | null>(null);
-  const handleChangeComplete = async (color: { hex: SetStateAction<string>; }) => {
-    setColor(color.hex);
-    console.log(color.hex);
-    hexToRgb(color.hex);
-    //send to api
-    /*try {
-      const response = await fetch('http://localhost:3000/api/color', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ color: color.hex }),
-      });
-    } catch (error) {
-      console.error('Error fetching data: ', error);
-      setError(`Error fetching data: ${error}`);
-    }*/
-  };
 
   const hexToRgb = (hex: string) => {
     hex = hex.replace(/^#/, '');
@@ -37,6 +21,11 @@ export default function Home() {
     let b = parseInt(hex.substring(4, 6), 16);
 
     return console.log(r, g, b);
+  };
+
+  const sendToAPI = async (color: string) => {
+    console.log(color);
+    hexToRgb(color);
   };
   /*
   if (error) {
@@ -53,11 +42,20 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className="text-6xl font-bold">Welcome to Led Color Picker!</h1>
-      <ChromePicker
+      <Sketch
+        style={{ marginLeft: 20 }}
         color={color}
-        onChangeComplete={handleChangeComplete}
-        disableAlpha={true}
+        onChange={(color) => {
+          setColor(color.hex);
+        }}
       />
+      <button
+        onClick={() => sendToAPI(color)}
+        className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+      >
+        Send Color to API/LED
+      </button>
+
       <Footer />
     </main>
   );
