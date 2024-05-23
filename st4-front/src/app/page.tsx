@@ -14,7 +14,7 @@ export default function Home() {
     console.log(color.hex);
     hexToRgb(color.hex);
     //send to api
-    try {
+    /*try {
       const response = await fetch('http://localhost:3000/api/color', {
         method: 'POST',
         headers: {
@@ -25,7 +25,7 @@ export default function Home() {
     } catch (error) {
       console.error('Error fetching data: ', error);
       setError(`Error fetching data: ${error}`);
-    }
+    }*/
   };
 
   const hexToRgb = (hex: string) => {
