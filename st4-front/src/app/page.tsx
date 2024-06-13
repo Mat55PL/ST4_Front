@@ -10,6 +10,9 @@ import Footer from "./footer";
 
 export default function Home() {
   const [color, setColor] = useState('#fff');
+  const [ledNumber, setLedNumber] = useState<number>(0);
+  const [ledBrightness, setLedBrightness] = useState<number>(0);
+  const [ledStatus, setLedStatus] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const hexToRgb = (hex: string) => {
@@ -27,6 +30,12 @@ export default function Home() {
     console.log(color);
     hexToRgb(color);
   };
+
+  const sendToAPIWithLedNumber = async (color: string, ledNumber: number) => {
+    console.log(color, ledNumber);
+    hexToRgb(color);
+  };
+
   /*
   if (error) {
     return (
@@ -42,6 +51,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className="text-6xl font-bold">Welcome to Led Color Picker!</h1>
+      <p className="text-2xl mt-4">ledBrightness: {ledBrightness}% | Led Status: {ledStatus ? "włączone ✅" : "wyłączone 📛"}</p>
       <Sketch
         style={{ marginLeft: 20 }}
         color={color}
@@ -53,9 +63,21 @@ export default function Home() {
         onClick={() => sendToAPI(color)}
         className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
       >
-        Send Color to API/LED
+        Send Color to all API/LED
       </button>
-
+      <input
+        type="number"
+        placeholder="Write LED number"
+        className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
+        min="1"
+        onChange={(ledNumber) => { setLedNumber(Number(ledNumber.target.value)) }}
+      />
+      <button
+        onClick={() => sendToAPIWithLedNumber(color, ledNumber)}
+        className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+      >
+        Send Color to specific LED
+      </button>
       <Footer />
     </main>
   );
