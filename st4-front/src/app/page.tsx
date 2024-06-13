@@ -50,8 +50,8 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-6xl font-bold">Welcome to Led Color Picker!</h1>
-      <p className="text-2xl mt-4">ledBrightness: {ledBrightness}% | Led Status: {ledStatus ? "włączone ✅" : "wyłączone 📛"}</p>
+      <h1 className="text-6xl font-bold">Led Color Picker!</h1>
+      <p className="text-2xl mt-4">Jasność: {ledBrightness}% | Led Status: {ledStatus ? "włączone ✅" : "wyłączone 📛"}</p>
       <Sketch
         style={{ marginLeft: 20 }}
         color={color}
@@ -63,7 +63,7 @@ export default function Home() {
         onClick={() => sendToAPI(color)}
         className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
       >
-        Send Color to all API/LED
+        Wyślij żądanie do wszystkich diod LED
       </button>
       <input
         type="number"
@@ -76,7 +76,7 @@ export default function Home() {
         onClick={() => sendToAPIWithLedNumber(color, ledNumber)}
         className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
       >
-        Send Color to specific LED
+        Wyślij żądanie do konkretnej diody LED
       </button>
       <Footer />
     </main>
