@@ -35,18 +35,14 @@ export default function Home() {
     try {
       const response = await fetch(`http://127.0.0.1:8001/WebService/postWszystkieKolor?B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
         //body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Success:', result);
+      console.log('Success');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -54,13 +50,47 @@ export default function Home() {
 
   const sendToAPIWithLedNumber = async (color: string, ledNumber: number) => {
     console.log(color, ledNumber);
-    hexToRgb(color);
+    let rbgColor = hexToRgb(color);
+    console.log(rbgColor);
+    try {
+      const response = await fetch(`http://127.0.0.1:8001/WebService/postKolor?numer=${ledNumber}&B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify(data),
+      });
+
+      console.log('Success');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
+  const sendBrightness = async (brightness: number) => {
+    console.log(brightness);
+    try {
+      const response = await fetch(`http://127.0.0.1:8001/WebService/postJasnosc?jasnosc=${brightness}`, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify(data),
+      });
+
+      console.log('Success');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
   const getStatus = async () => {
     try {
-      const response = await fetch('https://your-api-endpoint.com/status', {
+      const response = await fetch('http://127.0.0.1:8001/WebService/getStan', {
         method: 'GET',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -78,32 +108,13 @@ export default function Home() {
     }
   };
 
-  const sendBrightness = async (brightness: number) => {
-    console.log(brightness);
-    try {
-      const response = await fetch('https://your-api-endpoint.com/brightness', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        //body: JSON.stringify(data),
-      });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Success:', result);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
 
   const getBrightness = async () => {
     try {
-      const response = await fetch('https://your-api-endpoint.com/brightness', {
+      const response = await fetch('http://127.0.0.1:8001/WebService/getJasnosc', {
         method: 'GET',
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
