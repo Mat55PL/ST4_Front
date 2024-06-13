@@ -102,7 +102,7 @@ export default function Home() {
 
       const result = await response.json();
       console.log('Success:', result);
-      setLedStatus(result.status);
+      setLedStatus(result.stan);
     } catch (error) {
       console.error('Error:', error);
     }
