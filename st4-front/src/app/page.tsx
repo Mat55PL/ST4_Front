@@ -23,17 +23,102 @@ export default function Home() {
     let g = parseInt(hex.substring(2, 4), 16);
     let b = parseInt(hex.substring(4, 6), 16);
 
-    return console.log(r, g, b);
+    let colorRGB = { r, g, b };
+
+    return colorRGB;
   };
 
   const sendToAPI = async (color: string) => {
     console.log(color);
-    hexToRgb(color);
+    let rbgColor = hexToRgb(color);
+    console.log(rbgColor);
+    try {
+      const response = await fetch(`http://127.0.0.1:8001/WebService/postWszystkieKolor?B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Success:', result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const sendToAPIWithLedNumber = async (color: string, ledNumber: number) => {
     console.log(color, ledNumber);
     hexToRgb(color);
+  };
+
+  const getStatus = async () => {
+    try {
+      const response = await fetch('https://your-api-endpoint.com/status', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Success:', result);
+      setLedStatus(result.status);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const sendBrightness = async (brightness: number) => {
+    console.log(brightness);
+    try {
+      const response = await fetch('https://your-api-endpoint.com/brightness', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        //body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Success:', result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  const getBrightness = async () => {
+    try {
+      const response = await fetch('https://your-api-endpoint.com/brightness', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Success:', result);
+      setLedBrightness(result.brightness);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   /*
@@ -69,7 +154,7 @@ export default function Home() {
         type="number"
         placeholder="Write LED number"
         className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
-        min="1"
+        min="0"
         onChange={(ledNumber) => { setLedNumber(Number(ledNumber.target.value)) }}
       />
       <button
