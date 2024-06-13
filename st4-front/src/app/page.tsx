@@ -1,6 +1,6 @@
 'use client';
 import Image from "next/image";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Slider, Sketch, Material, Colorful, Compact, Circle, Wheel, Block, Github, Chrome, HsvaColor } from '@uiw/react-color';
 import { Alpha, Hue, ShadeSlider, Saturation, hsvaToHslaString } from '@uiw/react-color';
 import { EditableInput, EditableInputRGBA, EditableInputHSLA } from '@uiw/react-color';
@@ -108,6 +108,16 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    // Call getStatus immediately when the component mounts
+    getStatus();
+
+    // Set up an interval to call getStatus every 30 seconds
+    const intervalId = setInterval(getStatus, 30000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
 
   const getBrightness = async () => {
