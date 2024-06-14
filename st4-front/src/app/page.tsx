@@ -33,9 +33,8 @@ export default function Home() {
     let rbgColor = hexToRgb(color);
     console.log(rbgColor);
     try {
-      const response = await fetch(`http://127.0.0.1:8001/WebService/postWszystkieKolor?B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
+      const response = await fetch(`http://127.0.0.1:80/WebService/postWszystkieKolor?B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -53,9 +52,8 @@ export default function Home() {
     let rbgColor = hexToRgb(color);
     console.log(rbgColor);
     try {
-      const response = await fetch(`http://127.0.0.1:8001/WebService/postKolor?numer=${ledNumber}&B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
+      const response = await fetch(`http://127.0.0.1:80/WebService/postKolor?numer=${ledNumber}&B=${rbgColor.b}&G=${rbgColor.g}&R=${rbgColor.r}`, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -71,9 +69,8 @@ export default function Home() {
   const sendBrightness = async (brightness: number) => {
     console.log(brightness);
     try {
-      const response = await fetch(`http://127.0.0.1:8001/WebService/postJasnosc?jasnosc=${brightness}`, {
+      const response = await fetch(`http://127.0.0.1:80/WebService/postJasnosc?jasnosc=${brightness}`, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -88,17 +85,12 @@ export default function Home() {
 
   const getStatus = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8001/WebService/getStan', {
+      const response = await fetch('http://127.0.0.1:80/WebService/getStan', {
         method: 'GET',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
 
       const result = await response.json();
       console.log('Success:', result);
@@ -108,39 +100,51 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    // Call getStatus immediately when the component mounts
-    getStatus();
-
-    // Set up an interval to call getStatus every 30 seconds
-    const intervalId = setInterval(getStatus, 30000);
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, []);
-
-
-  const getBrightness = async () => {
+  const setStatus = async (status: boolean) => {
     try {
-      const response = await fetch('http://127.0.0.1:8001/WebService/getJasnosc', {
-        method: 'GET',
-        mode: 'no-cors',
+      const response = await fetch(`http://127.0.0.1:80/WebService/postStan?stan=${status}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Success:', result);
-      setLedBrightness(result.brightness);
+      console.log('Success');
+      setLedStatus(status);
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
+  const getBrightness = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:80/WebService/getJasnosc', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      console.log('Success:', result);
+      setLedBrightness(result.jasnosc);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    getBrightness();
+    const intervalId = setInterval(getBrightness, 4000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    getStatus();
+    const intervalId = setInterval(getStatus, 4000);
+    return () => clearInterval(intervalId);
+  }, []);
+
 
   /*
   if (error) {
@@ -158,6 +162,20 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className="text-6xl font-bold">Led Color Picker!</h1>
       <p className="text-2xl mt-4">Jasność: {ledBrightness}% | Led Status: {ledStatus ? "włączone ✅" : "wyłączone 📛"}</p>
+      <p className="space-x-4">
+        <button
+          onClick={() => setStatus(true)}
+          className="bg-green-500 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
+        >
+          Włącz diody LED
+        </button>
+        <button
+          onClick={() => setStatus(false)}
+          className="bg-red-500 hover:bg-red-300 text-white font-bold py-2 px-4 rounded"
+        >
+          Wyłącz diody LED
+        </button>
+      </p>
       <Sketch
         style={{ marginLeft: 20 }}
         color={color}
@@ -173,7 +191,7 @@ export default function Home() {
       </button>
       <input
         type="number"
-        placeholder="Write LED number"
+        placeholder="Podaj numer diody LED"
         className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
         min="0"
         onChange={(ledNumber) => { setLedNumber(Number(ledNumber.target.value)) }}
@@ -183,6 +201,20 @@ export default function Home() {
         className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
       >
         Wyślij żądanie do konkretnej diody LED
+      </button>
+      <input
+        type="number"
+        placeholder="Podaj w % jasność diod LED"
+        className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
+        min="0"
+        max="100"
+        onChange={(brightness) => { setLedBrightness(Number(brightness.target.value)) }}
+      />
+      <button
+        onClick={() => sendBrightness(ledBrightness)}
+        className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+      >
+        Wyślij żądanie zmiany jasności diod LED
       </button>
       <Footer />
     </main>
