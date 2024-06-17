@@ -160,9 +160,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-6xl font-bold">Led Color Picker!</h1>
-      <p className="text-2xl mt-4">Jasność: {ledBrightness}% | Led Status: {ledStatus ? "włączone ✅" : "wyłączone 📛"}</p>
-      <p className="space-x-4">
+      <div className="mb-4">
+        <h1 className="text-6xl font-bold">Led Color Picker!</h1>
+      </div>
+      <div className="mb-4">
+        <p className="text-2xl mt-4">Jasność: {ledBrightness}% | Led Status: {ledStatus ? "włączone ✅" : "wyłączone 📛"}</p>
+      </div>
+      <div className="space-x-4 mb-4">
         <button
           onClick={() => setStatus(true)}
           className="bg-green-500 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
@@ -175,47 +179,59 @@ export default function Home() {
         >
           Wyłącz diody LED
         </button>
-      </p>
-      <Sketch
-        style={{ marginLeft: 20 }}
-        color={color}
-        onChange={(color) => {
-          setColor(color.hex);
-        }}
-      />
-      <button
-        onClick={() => sendToAPI(color)}
-        className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
-      >
-        Wyślij żądanie do wszystkich diod LED
-      </button>
-      <input
-        type="number"
-        placeholder="Podaj numer diody LED"
-        className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
-        min="0"
-        onChange={(ledNumber) => { setLedNumber(Number(ledNumber.target.value)) }}
-      />
-      <button
-        onClick={() => sendToAPIWithLedNumber(color, ledNumber)}
-        className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
-      >
-        Wyślij żądanie do konkretnej diody LED
-      </button>
-      <input
-        type="number"
-        placeholder="Podaj w % jasność diod LED"
-        className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
-        min="0"
-        max="100"
-        onChange={(brightness) => { setLedBrightness(Number(brightness.target.value)) }}
-      />
-      <button
-        onClick={() => sendBrightness(ledBrightness)}
-        className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
-      >
-        Wyślij żądanie zmiany jasności diod LED
-      </button>
+      </div>
+      <div className="mb-4">
+        <Sketch
+          style={{ marginLeft: 20 }}
+          color={color}
+          onChange={(color) => {
+            setColor(color.hex);
+          }}
+        />
+      </div>
+      <div className="mb-4">
+        <button
+          onClick={() => sendToAPI(color)}
+          className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+        >
+          Wyślij żądanie do wszystkich diod LED
+        </button>
+      </div>
+      <div className="mb-4">
+        <input
+          type="number"
+          placeholder="Podaj numer diody LED"
+          className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
+          min="0"
+          onChange={(ledNumber) => { setLedNumber(Number(ledNumber.target.value)) }}
+        />
+      </div>
+      <div className="mb-4">
+        <button
+          onClick={() => sendToAPIWithLedNumber(color, ledNumber)}
+          className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+        >
+          Wyślij żądanie do konkretnej diody LED
+        </button>
+      </div>
+      <div className="mb-4">
+        <input
+          type="number"
+          placeholder="Podaj jasność (%) diod LED"
+          className="text-black bg-gray-200 border border-gray-300 p-2 rounded"
+          min="1"
+          max="100"
+          onChange={(brightness) => { setLedBrightness(Number(brightness.target.value)) }}
+        />
+      </div>
+      <div className="mb-4">
+        <button
+          onClick={() => sendBrightness(ledBrightness)}
+          className="bg-blue-500 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded"
+        >
+          Wyślij żądanie zmiany jasności diod LED
+        </button>
+      </div>
       <Footer />
     </main>
   );
